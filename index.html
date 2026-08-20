@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bé Minh Anh Học Tiếng Anh - Cô Giáo Mèo Gemini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-fredoka {
+            font-family: 'Fredoka', cursive;
+        }
+
+        /* Duolingo 3D Button Style */
+        .btn-3d-green {
+            background-color: #58cc02;
+            box-shadow: 0 5px 0 #46a302;
+            transition: all 0.1s ease;
+        }
+        .btn-3d-green:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #46a302;
+        }
+
+        .btn-3d-blue {
+            background-color: #1cb0f6;
+            box-shadow: 0 5px 0 #1899d6;
+            transition: all 0.1s ease;
+        }
+        .btn-3d-blue:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #1899d6;
+        }
+
+        .btn-3d-yellow {
+            background-color: #ffc800;
+            box-shadow: 0 5px 0 #e5b200;
+            transition: all 0.1s ease;
+        }
+        .btn-3d-yellow:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #e5b200;
+        }
+
+        /* Avatar Animations */
+        @keyframes catIdle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+        @keyframes catTalk {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.05) translateY(-3px); }
+        }
+        @keyframes catDance {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-8deg) translateY(-10px); }
+            75% { transform: scale(1.1) rotate(8deg) translateY(-10px); }
+        }
+        @keyframes mouthSpeak {
+            0%, 100% { d: path('M 42 54 Q 50 57 58 54'); }
+            50% { d: path('M 42 54 Q 50 63 58 54'); }
+        }
+
+        .cat-idle { animation: catIdle 3s ease-in-out infinite; }
+        .cat-talking { animation: catTalk 0.3s ease-in-out infinite; }
+        .cat-dance { animation: catDance 0.5s ease-in-out infinite; }
+        .mouth-anim { animation: mouthSpeak 0.25s infinite; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-amber-50/50 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b-4 border-amber-200 px-4 py-3 shadow-sm">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showRoadmap()">
+                <div class="w-11 h-11 bg-amber-400 rounded-2xl flex items-center justify-center text-white text-2xl shadow-[0_4px_0_#d97706]">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="font-fredoka text-xl font-bold text-amber-600 tracking-wide">Gemini Kids English</h1>
+                    <p class="text-xs font-semibold text-slate-400">Giọng Đọc Chuẩn Google TTS vi-VN</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div class="bg-yellow-100 border-2 border-yellow-300 rounded-2xl px-3 py-1.5 flex items-center space-x-1.5 shadow-sm">
+                    <i class="fa-solid fa-star text-yellow-500 text-lg animate-pulse"></i>
+                    <span id="star-count" class="font-fredoka text-lg font-bold text-yellow-700">0</span>
+                </div>
+
+                <button onclick="speakProfileName()" title="Bấm để nghe tên bé"
+                    class="bg-pink-100 hover:bg-pink-200 border-2 border-pink-300 rounded-full px-3.5 py-1.5 flex items-center space-x-2 transition active:scale-95 shadow-sm">
+                    <div class="w-7 h-7 bg-pink-400 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                        <i class="fa-solid fa-child"></i>
+                    </div>
+                    <span class="font-bold text-pink-700 text-sm sm:text-base">Bé: Minh Anh</span>
+                    <i class="fa-solid fa-volume-high text-pink-500 text-xs animate-bounce"></i>
+                </button>
+
+                <button onclick="toggleAudioModal()" class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-2xl flex items-center justify-center text-slate-600 border-2 border-slate-200 transition">
+                    <i class="fa-solid fa-sliders text-base"></i>
+                </button>
+
+                <button id="cam-toggle-btn" onclick="toggleCamera()" class="w-10 h-10 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 border-2 border-indigo-300 rounded-2xl flex items-center justify-center transition">
+                    <i class="fa-solid fa-video text-base"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-1 flex flex-col md:flex-row gap-6">
+
+        <aside class="w-full md:w-80 flex flex-col gap-5 shrink-0">
+            <div class="bg-white rounded-3xl p-5 border-4 border-amber-200 shadow-xl flex flex-col items-center text-center relative overflow-hidden">
+                <div class="absolute top-3 left-3 bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full border border-amber-300">
+                    <i class="fa-solid fa-sparkles mr-1"></i>Cô giáo AI
+                </div>
+
+                <div class="w-40 h-40 my-2 flex items-center justify-center">
+                    <svg id="cat-avatar" class="w-full h-full cat-idle transition-all duration-300" viewBox="0 0 100 100">
+                        <polygon points="20,35 10,10 40,22" fill="#f59e0b" stroke="#d97706" stroke-width="2.5" stroke-linejoin="round"/>
+                        <polygon points="22,32 15,15 37,23" fill="#fef3c7"/>
+                        <polygon points="80,35 90,10 60,22" fill="#f59e0b" stroke="#d97706" stroke-width="2.5" stroke-linejoin="round"/>
+                        <polygon points="78,32 85,15 63,23" fill="#fef3c7"/>
+                        <ellipse cx="50" cy="50" rx="36" ry="30" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/>
+                        <ellipse cx="25" cy="55" rx="6" ry="4" fill="#f43f5e" opacity="0.4"/>
+                        <ellipse cx="75" cy="55" rx="6" ry="4" fill="#f43f5e" opacity="0.4"/>
+                        <ellipse cx="36" cy="45" rx="5" ry="7" fill="#1e293b"/>
+                        <ellipse cx="64" cy="45" rx="5" ry="7" fill="#1e293b"/>
+                        <circle cx="34" cy="43" r="2" fill="#ffffff"/>
+                        <circle cx="62" cy="43" r="2" fill="#ffffff"/>
+                        <polygon points="50,50 46,47 54,47" fill="#f43f5e"/>
+                        <path id="cat-mouth" d="M 42 54 Q 50 57 58 54" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="15" y1="48" x2="30" y2="50" stroke="#d97706" stroke-width="2"/>
+                        <line x1="12" y1="56" x2="29" y2="55" stroke="#d97706" stroke-width="2"/>
+                        <line x1="85" y1="48" x2="70" y2="50" stroke="#d97706" stroke-width="2"/>
+                        <line x1="88" y1="56" x2="71" y2="55" stroke="#d97706" stroke-width="2"/>
+                        <circle cx="36" cy="45" r="10" fill="none" stroke="#0284c7" stroke-width="2"/>
+                        <circle cx="64" cy="45" r="10" fill="none" stroke="#0284c7" stroke-width="2"/>
+                        <line x1="46" y1="45" x2="54" y2="45" stroke="#0284c7" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <h2 class="font-fredoka text-xl font-bold text-amber-700">Cô Mèo Gemini</h2>
+                <p class="text-xs text-slate-500 font-medium">Giọng Phát Âm Trực Tiếp Google TTS</p>
+
+                <div class="mt-4 w-full bg-amber-50 border-2 border-amber-200 rounded-2xl p-3 relative min-h-[70px] flex items-center justify-center">
+                    <p id="teacher-speech-text" class="text-sm font-bold text-amber-900 leading-snug">
+                        Chào bé Minh Anh! Cùng luyện nói tiếng Anh với giọng đọc chuẩn nhé! 🐯🐰
+                    </p>
+                </div>
+            </div>
+
+            <div id="camera-card" class="hidden bg-white rounded-3xl p-4 border-4 border-indigo-200 shadow-xl flex-col items-center">
+                <div class="flex items-center justify-between w-full mb-2">
+                    <span class="text-xs font-bold text-indigo-700 flex items-center">
+                        <i class="fa-solid fa-camera mr-1.5 animate-pulse text-red-500"></i>Camera Học Cùng Bé
+                    </span>
+                    <button onclick="toggleCamera()" class="text-slate-400 hover:text-slate-600 text-sm">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="relative w-full h-44 bg-slate-900 rounded-2xl overflow-hidden border-2 border-indigo-100 flex items-center justify-center">
+                    <video id="webcam-video" autoplay playsinline muted class="w-full h-full object-cover transform -scale-x-100"></video>
+                    <div id="cam-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 p-4 text-center">
+                        <i class="fa-solid fa-video-slash text-2xl mb-1"></i>
+                        <span class="text-xs">Đang mở camera...</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="flex-1 bg-white rounded-3xl p-5 sm:p-7 border-4 border-amber-200 shadow-xl flex flex-col">
+            <div id="roadmap-view" class="w-full flex-1 flex flex-col">
+                <div class="mb-6 text-center sm:text-left">
+                    <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-slate-800">Lộ Trình Học Nói Hoạt Hình (5 - 15 Tuổi)</h2>
+                    <p class="text-sm text-slate-500 font-semibold mt-1">Sử dụng Google TTS API vi-VN trực tuyến phát âm chuẩn xác!</p>
+                </div>
+                <div id="stages-container" class="grid grid-cols-1 gap-4 flex-1"></div>
+            </div>
+
+            <div id="lesson-view" class="hidden w-full flex-1 flex-col">
+                <div class="flex items-center justify-between pb-4 border-b-2 border-slate-100 mb-5">
+                    <button onclick="showRoadmap()" class="text-slate-500 hover:text-amber-600 font-bold text-sm flex items-center transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Quay lại Lộ trình
+                    </button>
+                    <div id="lesson-stage-title" class="font-fredoka text-lg font-bold text-amber-600">Stage 1</div>
+                </div>
+
+                <div class="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden mb-6 border border-slate-200">
+                    <div id="exercise-progress" class="bg-gradient-to-r from-green-400 to-green-500 h-full w-0 transition-all duration-500 rounded-full"></div>
+                </div>
+
+                <div id="exercise-card-container" class="flex-1 flex flex-col items-center justify-center text-center"></div>
+            </div>
+
+            <div id="quiz-view" class="hidden w-full flex-1 flex-col justify-between">
+                <div class="flex items-center justify-between pb-3 border-b-2 border-red-100 mb-4">
+                    <span class="bg-red-100 text-red-600 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
+                        <i class="fa-solid fa-file-signature mr-1"></i>Thử Thách
+                    </span>
+                    <span id="quiz-timer" class="font-fredoka text-amber-600 font-bold text-sm">
+                        <i class="fa-solid fa-clock mr-1"></i>Đạt ≥ 80% để mở khóa
+                    </span>
+                </div>
+                <div id="quiz-content" class="flex-1 flex flex-col justify-center items-center py-4"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white border-t-2 border-amber-200 py-3 text-center text-xs text-slate-400 font-medium">
+        Bé Minh Anh Luyện Nói Tiếng Anh • Tích hợp Google TTS Direct Audio API (vi-VN)
+    </footer>
+
+    <div id="audio-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border-4 border-amber-300 p-6 w-full max-w-md shadow-2xl">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-fredoka text-xl font-bold text-amber-700">Cài Đặt Âm Thanh</h3>
+                <button onclick="toggleAudioModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-5">
+                <div>
+                    <div class="flex justify-between text-sm font-bold text-slate-700 mb-2">
+                        <span><i class="fa-solid fa-volume-high text-amber-500 mr-2"></i>Âm Lượng:</span>
+                        <span id="vol-value-text" class="text-amber-600">100%</span>
+                    </div>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" oninput="updateAudioSettings()" class="w-full h-3 bg-amber-100 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                </div>
+            </div>
+            <button onclick="toggleAudioModal()" class="w-full mt-6 py-3 bg-amber-500 text-white font-bold rounded-2xl shadow-[0_4px_0_#d97706]">Đồng Ý</button>
+        </div>
+    </div>
+
+    <script>
+        const CURRICULUM_STAGES = [
+            {
+                id: 1,
+                name: "Stage 1: Pre-A1 Starters (Hội Thoại Hoạt Hình)",
+                ageGroup: "5 - 7 Tuổi",
+                badgeColor: "bg-emerald-500",
+                description: "Hổ con, Sói & Thỏ - Luyện câu ngắn tự nhiên dễ thuộc",
+                lessons: [
+                    {
+                        id: "s1_l1",
+                        title: "Bài 1: Cuộc Gặp Giữa Sói & Hổ Con",
+                        items: [
+                            { word: "Tiger, are you sure?", vi: "Hổ ơi, ngươi chắc chưa?", icon: "🐺", speaker: "Wolf (Sói)" },
+                            { word: "Yes, yes, yes!", vi: "Đúng đấy, đúng đấy!", icon: "🐯", speaker: "Tiger (Hổ)" },
+                            { word: "Go away! Go away!", vi: "Biến đi! Biến đi!", icon: "🐯", speaker: "Tiger (Hổ)" },
+                            { word: "Rabbit! Rabbit! I want to eat you!", vi: "Thỏ kìa! Ta muốn ăn thịt ngươi!", icon: "🐺", speaker: "Wolf (Sói)" },
+                            { word: "Help! Help!", vi: "Cứu tôi với! Cứu tôi với!", icon: "🐰", speaker: "Rabbit (Thỏ)" },
+                            { word: "I'm a tiger! Wolf, don't eat the rabbit!", vi: "Ta là hổ đây! Sói, không được ăn thịt thỏ!", icon: "🐯", speaker: "Tiger (Hổ)" },
+                            { word: "Who are you?", vi: "Ngươi là ai?", icon: "🐺", speaker: "Wolf (Sói)" }
+                        ]
+                    }
+                ],
+                quiz: [
+                    { question: "Khi Tiger muốn đuổi Sói đi, Hổ nói câu gì?", options: ["Help! Help!", "Go away! Go away!", "I want to eat you!"], answer: 1 },
+                    { question: "'Who are you?' trong đoạn hội thoại nghĩa là gì?", options: ["Ngươi là ai?", "Bạn đi đâu đấy?", "Ai cứu tôi với?"], answer: 0 }
+                ]
+            },
+            {
+                id: 2,
+                name: "Stage 2: A1 Movers",
+                ageGroup: "8 - 9 Tuổi",
+                badgeColor: "bg-sky-500",
+                description: "Thói quen hàng ngày, Trường học, Giao tiếp nhí nhảnh",
+                lessons: [
+                    {
+                        id: "s2_l1",
+                        title: "Bài 1: Ngày Của Bé",
+                        items: [
+                            { word: "Good morning! Time to wake up!", vi: "Chào buổi sáng! Dậy thôi nào!", icon: "⏰", speaker: "Kid" },
+                            { word: "I have a big school bag!", vi: "Tớ có một chiếc cặp sách rất to!", icon: "🎒", speaker: "Kid" }
+                        ]
+                    }
+                ],
+                quiz: [
+                    { question: "'Good morning!' có nghĩa là gì?", options: ["Chào buổi tối!", "Chào buổi sáng!", "Tạm biệt!"], answer: 1 }
+                ]
+            }
+        ];
+
+        let state = {
+            stars: parseInt(localStorage.getItem('gemini_stars') || '0'),
+            unlockedStages: JSON.parse(localStorage.getItem('gemini_unlocked') || '[1]'),
+            stageScores: JSON.parse(localStorage.getItem('gemini_scores') || '{}'),
+            speechVolume: parseFloat(localStorage.getItem('gemini_vol') || '1.0'),
+            currentStage: null,
+            currentLesson: null,
+            exerciseIndex: 0,
+            quizScore: 0,
+            quizIndex: 0,
+            isListening: false
+        };
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = SpeechRecognition ? new SpeechRecognition() : null;
+        if (recognition) {
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+        }
+
+        /* ==========================================================================
+           GOOGLE TTS AUDIO DIRECT PLAYER (PHÁT ÂM TIẾNG VIỆT CHUẨN vi-VN TRỰC TUYẾN)
+           ========================================================================== */
+        let activeAudio = null;
+
+        function speak(text, lang = 'vi-VN', onEndCallback = null) {
+            // Ngừng âm thanh cũ nếu đang phát
+            if (activeAudio) {
+                activeAudio.pause();
+                activeAudio = null;
+            }
+
+            // Mã hóa đường truyền phát âm trực tiếp từ Google TTS Direct Audio
+            const encodedText = encodeURIComponent(text);
+            const ttsLang = lang.startsWith('en') ? 'en' : 'vi';
+            const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${ttsLang}&client=tw-ob`;
+
+            const audio = new Audio(audioUrl);
+            audio.volume = state.speechVolume;
+            activeAudio = audio;
+
+            setTeacherState('talking');
+
+            audio.play().then(() => {
+                audio.onended = () => {
+                    setTeacherState('idle');
+                    activeAudio = null;
+                    if (onEndCallback) onEndCallback();
+                };
+            }).catch(() => {
+                // Tự động chuyển về Web Speech API phòng trường hợp offline
+                fallbackSpeechSynthesis(text, lang, onEndCallback);
+            });
+        }
+
+        function fallbackSpeechSynthesis(text, lang, onEndCallback) {
+            if (!('speechSynthesis' in window)) {
+                if (onEndCallback) onEndCallback();
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = lang;
+            utter.volume = state.speechVolume;
+            utter.rate = 0.95;
+            utter.pitch = 1.3;
+
+            utter.onend = () => {
+                setTeacherState('idle');
+                if (onEndCallback) onEndCallback();
+            };
+            window.speechSynthesis.speak(utter);
+        }
+
+        function speakProfileName() {
+            speak("Bé Minh Anh", "vi-VN", () => {
+                setTeacherSpeech("Bé Minh Anh ơi! Cùng tập nói tiếng Anh với cô giáo nhé!");
+            });
+        }
+
+        function setTeacherState(teacherState) {
+            const avatar = document.getElementById('cat-avatar');
+            const mouth = document.getElementById('cat-mouth');
+            if (!avatar) return;
+
+            avatar.classList.remove('cat-idle', 'cat-talking', 'cat-dance');
+            mouth.classList.remove('mouth-anim');
+
+            if (teacherState === 'talking') {
+                avatar.classList.add('cat-talking');
+                mouth.classList.add('mouth-anim');
+            } else if (teacherState === 'dance') {
+                avatar.classList.add('cat-dance');
+            } else {
+                avatar.classList.add('cat-idle');
+            }
+        }
+
+        function setTeacherSpeech(text) {
+            const speechText = document.getElementById('teacher-speech-text');
+            if (speechText) speechText.innerText = text;
+        }
+
+        function updateStarDisplay() {
+            document.getElementById('star-count').innerText = state.stars;
+            localStorage.setItem('gemini_stars', state.stars.toString());
+            localStorage.setItem('gemini_unlocked', JSON.stringify(state.unlockedStages));
+            localStorage.setItem('gemini_scores', JSON.stringify(state.stageScores));
+        }
+
+        function renderRoadmap() {
+            const container = document.getElementById('stages-container');
+            container.innerHTML = '';
+
+            CURRICULUM_STAGES.forEach((stage) => {
+                const isUnlocked = state.unlockedStages.includes(stage.id);
+                const lastScore = state.stageScores[stage.id] !== undefined ? state.stageScores[stage.id] : null;
+
+                const card = document.createElement('div');
+                card.className = `p-5 rounded-3xl border-4 transition-all ${
+                    isUnlocked ? 'bg-white border-amber-300 shadow-md hover:shadow-lg' : 'bg-slate-50 border-slate-200 opacity-75'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-14 h-14 rounded-2xl ${stage.badgeColor} flex items-center justify-center text-white font-fredoka text-2xl shadow-[0_4px_0_rgba(0,0,0,0.15)] shrink-0">
+                                ${isUnlocked ? stage.id : '<i class="fa-solid fa-lock"></i>'}
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <h3 class="font-fredoka text-lg sm:text-xl font-bold text-slate-800">${stage.name}</h3>
+                                    <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">${stage.ageGroup}</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${stage.description}</p>
+                                ${lastScore !== null ? `
+                                    <div class="mt-2 text-xs font-bold ${lastScore >= 80 ? 'text-green-600' : 'text-amber-600'}">
+                                        <i class="fa-solid fa-trophy mr-1"></i>Điểm kiểm tra: ${lastScore}%
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2 sm:self-center">
+                            ${isUnlocked ? `
+                                <button onclick="startStageLesson(${stage.id})" class="btn-3d-green text-white font-bold px-5 py-2.5 rounded-2xl text-sm flex-1 sm:flex-none">
+                                    <i class="fa-solid fa-play mr-2"></i>Luyện Nói
+                                </button>
+                                <button onclick="startStageQuiz(${stage.id})" class="btn-3d-yellow text-slate-800 font-bold px-4 py-2.5 rounded-2xl text-sm flex-1 sm:flex-none">
+                                    <i class="fa-solid fa-file-check mr-1.5"></i>Thử Thách
+                                </button>
+                            ` : `
+                                <button disabled class="bg-slate-200 text-slate-400 font-bold px-5 py-2.5 rounded-2xl text-sm cursor-not-allowed w-full">
+                                    <i class="fa-solid fa-lock mr-2"></i>Chưa Mở Khóa
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showRoadmap() {
+            document.getElementById('roadmap-view').classList.remove('hidden');
+            document.getElementById('lesson-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            setTeacherSpeech("Bé chọn bài học để luyện giọng cùng cô nhé!");
+            renderRoadmap();
+        }
+
+        function startStageLesson(stageId) {
+            const stage = CURRICULUM_STAGES.find(s => s.id === stageId);
+            if (!stage || !stage.lessons.length) return;
+
+            state.currentStage = stage;
+            state.currentLesson = stage.lessons[0];
+            state.exerciseIndex = 0;
+
+            document.getElementById('roadmap-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('lesson-view').classList.remove('hidden');
+            document.getElementById('lesson-stage-title').innerText = stage.name;
+
+            renderExercise();
+        }
+
+        function renderExercise() {
+            const items = state.currentLesson.items;
+            const item = items[state.exerciseIndex];
+            const progressPct = ((state.exerciseIndex + 1) / items.length) * 100;
+
+            document.getElementById('exercise-progress').style.width = `${progressPct}%`;
+
+            const container = document.getElementById('exercise-card-container');
+            container.innerHTML = `
+                <div class="max-w-md w-full bg-amber-50/60 border-2 border-amber-200 rounded-3xl p-6 shadow-sm">
+                    <div class="text-6xl mb-2 animate-bounce">${item.icon}</div>
+                    <span class="bg-amber-200 text-amber-900 font-bold text-xs px-3 py-1 rounded-full">${item.speaker || 'Nhân vật'}</span>
+                    <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-slate-800 tracking-wide mt-3">"${item.word}"</h2>
+                    <p class="text-base text-amber-700 font-bold mt-1">Dịch: "${item.vi}"</p>
+
+                    <div class="mt-6 flex flex-col gap-3">
+                        <button onclick="playTargetWord('${item.word.replace(/'/g, "\\'")}', '${item.vi.replace(/'/g, "\\'")}')" class="btn-3d-blue text-white font-bold py-3 px-6 rounded-2xl flex items-center justify-center space-x-2 text-base">
+                            <i class="fa-solid fa-volume-high text-lg"></i>
+                            <span>Nghe Giọng Đọc Google</span>
+                        </button>
+
+                        <button id="mic-btn" onclick="startVoiceRecognition('${item.word.replace(/'/g, "\\'")}')" class="btn-3d-yellow text-slate-800 font-bold py-3 px-6 rounded-2xl flex items-center justify-center space-x-2 text-base">
+                            <i id="mic-icon" class="fa-solid fa-microphone text-lg text-rose-600"></i>
+                            <span id="mic-btn-text">Bé Nhại Theo (Bấm Mic)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 w-full max-w-md flex justify-between items-center">
+                    <button onclick="prevExercise()" ${state.exerciseIndex === 0 ? 'disabled class="opacity-40 cursor-not-allowed text-slate-400 font-bold"' : 'class="text-slate-600 hover:text-amber-600 font-bold text-sm"'}>
+                        <i class="fa-solid fa-chevron-left mr-1"></i>Câu Trước
+                    </button>
+                    <span class="text-xs font-bold text-slate-400">${state.exerciseIndex + 1} / ${items.length}</span>
+                    <button onclick="nextExercise()" class="btn-3d-green text-white font-bold px-6 py-2.5 rounded-2xl text-sm">
+                        ${state.exerciseIndex === items.length - 1 ? 'Hoàn Thành <i class="fa-solid fa-check ml-1"></i>' : 'Câu Tiếp <i class="fa-solid fa-chevron-right ml-1"></i>'}
+                    </button>
+                </div>
+            `;
+
+            const guideText = `${item.speaker || 'Nhân vật'} nói: "${item.vi}". Bé nghe và nhại lại nhé!`;
+            setTeacherSpeech(guideText);
+            speak(guideText, "vi-VN", () => {
+                speak(item.word, "en-US");
+            });
+        }
+
+        function playTargetWord(word, vi) {
+            setTeacherSpeech(`Phát âm tiếng Anh: "${word}"`);
+            speak(word, "en-US");
+        }
+
+        function nextExercise() {
+            const items = state.currentLesson.items;
+            if (state.exerciseIndex < items.length - 1) {
+                state.exerciseIndex++;
+                renderExercise();
+            } else {
+                state.stars += 5;
+                updateStarDisplay();
+                setTeacherState('dance');
+                speak("Giỏi lắm bé Minh Anh! Bé đã hoàn thành bài tập rồi! Thưởng 5 sao nè!", "vi-VN", () => {
+                    setTimeout(() => {
+                        setTeacherState('idle');
+                        showRoadmap();
+                    }, 1500);
+                });
+            }
+        }
+
+        function prevExercise() {
+            if (state.exerciseIndex > 0) {
+                state.exerciseIndex--;
+                renderExercise();
+            }
+        }
+
+        function startVoiceRecognition(targetWord) {
+            if (!recognition) {
+                alert("Trình duyệt chưa hỗ trợ ghi âm. Bé hãy mở trên Chrome nhé!");
+                return;
+            }
+            if (state.isListening) return;
+
+            state.isListening = true;
+            const micBtnText = document.getElementById('mic-btn-text');
+            const micIcon = document.getElementById('mic-icon');
+
+            if (micBtnText) micBtnText.innerText = "Đang lắng nghe bé nói...";
+            if (micIcon) micIcon.className = "fa-solid fa-spinner fa-spin text-lg text-rose-600";
+
+            setTeacherSpeech("Cô đang lắng nghe đây, bé đọc to rõ lên nhé! 🎤");
+
+            try { recognition.start(); } catch (e) {}
+
+            recognition.onresult = (event) => {
+                state.isListening = false;
+                if (micBtnText) micBtnText.innerText = "Bé Nhại Theo (Bấm Mic)";
+                if (micIcon) micIcon.className = "fa-solid fa-microphone text-lg text-rose-600";
+
+                const transcript = event.results[0][0].transcript.toLowerCase().trim();
+                const target = targetWord.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, "").trim();
+                const spoken = transcript.replace(/[^a-zA-Z0-9 ]/g, "").trim();
+
+                if (spoken.includes(target) || target.includes(spoken)) {
+                    state.stars += 2;
+                    updateStarDisplay();
+                    setTeacherState('dance');
+                    setTeacherSpeech(`Đúng rồi! Bé phát âm rất chuẩn! Thưởng bé 2 sao ⭐`);
+                    speak("Giỏi quá! Bé phát âm rất chuẩn!", "vi-VN", () => {
+                        setTimeout(() => setTeacherState('idle'), 1200);
+                    });
+                } else {
+                    setTeacherSpeech(`Bé nói là "${transcript}". Thử lại lần nữa nhé!`);
+                    speak(`Bé nghe và đọc lại nhé`, "vi-VN", () => {
+                        speak(targetWord, "en-US");
+                    });
+                }
+            };
+
+            recognition.onerror = () => {
+                state.isListening = false;
+                if (micBtnText) micBtnText.innerText = "Bé Nhại Theo (Bấm Mic)";
+                if (micIcon) micIcon.className = "fa-solid fa-microphone text-lg text-rose-600";
+                setTeacherSpeech("Cô chưa nghe rõ, bé bấm mic rồi đọc lại nha!");
+            };
+        }
+
+        function startStageQuiz(stageId) {
+            const stage = CURRICULUM_STAGES.find(s => s.id === stageId);
+            if (!stage || !stage.quiz.length) return;
+
+            state.currentStage = stage;
+            state.quizIndex = 0;
+            state.quizScore = 0;
+
+            document.getElementById('roadmap-view').classList.add('hidden');
+            document.getElementById('lesson-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const quizList = state.currentStage.quiz;
+            const q = quizList[state.quizIndex];
+
+            const container = document.getElementById('quiz-content');
+            container.innerHTML = `
+                <div class="w-full max-w-lg bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-sm">
+                    <span class="text-xs font-bold text-slate-400">Câu hỏi ${state.quizIndex + 1} / ${quizList.length}</span>
+                    <h3 class="font-fredoka text-xl font-bold text-slate-800 mt-2 mb-6">${q.question}</h3>
+
+                    <div class="space-y-3 w-full">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="handleQuizAnswer(${idx})" class="w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50 font-bold text-slate-700 transition flex items-center justify-between">
+                                <span>${opt}</span>
+                                <i class="fa-regular fa-circle text-slate-300"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            setTeacherSpeech(`Câu ${state.quizIndex + 1}: ${q.question}`);
+            speak(q.question, "vi-VN");
+        }
+
+        function handleQuizAnswer(selectedIndex) {
+            const quizList = state.currentStage.quiz;
+            const q = quizList[state.quizIndex];
+
+            if (selectedIndex === q.answer) state.quizScore++;
+
+            if (state.quizIndex < quizList.length - 1) {
+                state.quizIndex++;
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            const quizList = state.currentStage.quiz;
+            const pct = Math.round((state.quizScore / quizList.length) * 100);
+            state.stageScores[state.currentStage.id] = pct;
+
+            const passed = pct >= 80;
+            if (passed) {
+                const nextStageId = state.currentStage.id + 1;
+                if (nextStageId <= CURRICULUM_STAGES.length && !state.unlockedStages.includes(nextStageId)) {
+                    state.unlockedStages.push(nextStageId);
+                }
+                state.stars += 10;
+                updateStarDisplay();
+                setTeacherState('dance');
+            }
+
+            const container = document.getElementById('quiz-content');
+            container.innerHTML = `
+                <div class="text-center p-6 max-w-md">
+                    <div class="text-6xl mb-4">${passed ? '🎉' : '💪'}</div>
+                    <h3 class="font-fredoka text-2xl font-bold text-slate-800">
+                        ${passed ? 'Chúc Mừng Bé Minh Anh!' : 'Cố Gắng Lần Sau Nhé!'}
+                    </h3>
+                    <p class="text-base font-bold mt-2 ${passed ? 'text-green-600' : 'text-amber-600'}">
+                        Kết quả: ${pct}% (${state.quizScore}/${quizList.length} câu đúng)
+                    </p>
+                    <button onclick="showRoadmap()" class="btn-3d-green text-white font-bold px-8 py-3 rounded-2xl text-base mt-6">
+                        Quay Về Lộ Trình
+                    </button>
+                </div>
+            `;
+
+            const endSpeech = passed
+                ? `Tuyệt vời quá bé Minh Anh ơi! Bé đạt ${pct} phần trăm và đã mở khóa bài học mới!`
+                : `Bé đạt ${pct} phần trăm. Cùng ôn lại rồi thử lại nhé!`;
+
+            setTeacherSpeech(endSpeech);
+            speak(endSpeech, "vi-VN", () => {
+                setTimeout(() => setTeacherState('idle'), 1500);
+            });
+        }
+
+        let mediaStream = null;
+        async function toggleCamera() {
+            const camCard = document.getElementById('camera-card');
+            const videoEl = document.getElementById('webcam-video');
+            const placeholder = document.getElementById('cam-placeholder');
+            const btn = document.getElementById('cam-toggle-btn');
+
+            if (camCard.classList.contains('hidden')) {
+                camCard.classList.remove('hidden');
+                camCard.classList.add('flex');
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                    videoEl.srcObject = mediaStream;
+                    placeholder.classList.add('hidden');
+                    btn.className = "w-10 h-10 bg-red-100 hover:bg-red-200 text-red-600 border-2 border-red-300 rounded-2xl flex items-center justify-center transition";
+                } catch (err) {
+                    alert("Không thể mở camera.");
+                    camCard.classList.add('hidden');
+                }
+            } else {
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    mediaStream = null;
+                }
+                camCard.classList.add('hidden');
+                camCard.classList.remove('flex');
+                btn.className = "w-10 h-10 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 border-2 border-indigo-300 rounded-2xl flex items-center justify-center transition";
+            }
+        }
+
+        function toggleAudioModal() {
+            document.getElementById('audio-modal').classList.toggle('hidden');
+        }
+
+        function updateAudioSettings() {
+            const vol = parseFloat(document.getElementById('volume-slider').value);
+            state.speechVolume = vol;
+            localStorage.setItem('gemini_vol', vol.toString());
+            document.getElementById('vol-value-text').innerText = `${Math.round(vol * 100)}%`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStarDisplay();
+            renderRoadmap();
+
+            setTimeout(() => {
+                speak("Chào bé Minh Anh! Cô Mèo Gemini đã sẵn sàng cùng bé tập nói tiếng Anh rồi!", "vi-VN");
+            }, 600);
+        });
+    </script>
+</body>
+</html>
