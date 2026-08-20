@@ -49,7 +49,7 @@
             box-shadow: 0 1px 0 #e5b200;
         }
 
-        /* Avatar Animations */
+        /* Avatar CSS Animations */
         @keyframes catIdle {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-8px) rotate(1deg); }
@@ -73,9 +73,17 @@
         .cat-dance { animation: catDance 0.5s ease-in-out infinite; }
         .mouth-anim { animation: mouthSpeak 0.25s infinite; }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
     </style>
 </head>
 <body class="bg-amber-50/50 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden">
@@ -88,7 +96,7 @@
                 </div>
                 <div class="hidden sm:block">
                     <h1 class="font-fredoka text-xl font-bold text-amber-600 tracking-wide">Gemini Kids English</h1>
-                    <p class="text-xs font-semibold text-slate-400">Giọng Đọc Chuẩn Google TTS vi-VN</p>
+                    <p class="text-xs font-semibold text-slate-400">Chuẩn Cambridge Quốc Tế</p>
                 </div>
             </div>
 
@@ -152,11 +160,11 @@
                 </div>
 
                 <h2 class="font-fredoka text-xl font-bold text-amber-700">Cô Mèo Gemini</h2>
-                <p class="text-xs text-slate-500 font-medium">Giọng Phát Âm Trực Tiếp Google TTS</p>
+                <p class="text-xs text-slate-500 font-medium">Hướng dẫn tiếng Anh cho bé</p>
 
                 <div class="mt-4 w-full bg-amber-50 border-2 border-amber-200 rounded-2xl p-3 relative min-h-[70px] flex items-center justify-center">
                     <p id="teacher-speech-text" class="text-sm font-bold text-amber-900 leading-snug">
-                        Chào bé Minh Anh! Cùng luyện nói tiếng Anh với giọng đọc chuẩn nhé! 🐯🐰
+                        Chào bé Minh Anh! Hôm nay chúng ta cùng học Tiếng Anh nhé! 🐱✨
                     </p>
                 </div>
             </div>
@@ -181,12 +189,15 @@
         </aside>
 
         <section class="flex-1 bg-white rounded-3xl p-5 sm:p-7 border-4 border-amber-200 shadow-xl flex flex-col">
+
             <div id="roadmap-view" class="w-full flex-1 flex flex-col">
                 <div class="mb-6 text-center sm:text-left">
-                    <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-slate-800">Lộ Trình Học Nói Hoạt Hình (5 - 15 Tuổi)</h2>
-                    <p class="text-sm text-slate-500 font-semibold mt-1">Sử dụng Google TTS API vi-VN trực tuyến phát âm chuẩn xác!</p>
+                    <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-slate-800">Lộ Trình Cambridge (5 - 15 Tuổi)</h2>
+                    <p class="text-sm text-slate-500 font-semibold mt-1">Hoàn thành bài kiểm tra cuối mỗi Stage (≥80%) để mở khóa chặng tiếp theo!</p>
                 </div>
-                <div id="stages-container" class="grid grid-cols-1 gap-4 flex-1"></div>
+
+                <div id="stages-container" class="grid grid-cols-1 gap-4 flex-1">
+                    </div>
             </div>
 
             <div id="lesson-view" class="hidden w-full flex-1 flex-col">
@@ -194,81 +205,118 @@
                     <button onclick="showRoadmap()" class="text-slate-500 hover:text-amber-600 font-bold text-sm flex items-center transition">
                         <i class="fa-solid fa-arrow-left mr-2"></i>Quay lại Lộ trình
                     </button>
-                    <div id="lesson-stage-title" class="font-fredoka text-lg font-bold text-amber-600">Stage 1</div>
+                    <div id="lesson-stage-title" class="font-fredoka text-lg font-bold text-amber-600">
+                        Stage 1: Pre-A1 Starters
+                    </div>
                 </div>
 
                 <div class="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden mb-6 border border-slate-200">
                     <div id="exercise-progress" class="bg-gradient-to-r from-green-400 to-green-500 h-full w-0 transition-all duration-500 rounded-full"></div>
                 </div>
 
-                <div id="exercise-card-container" class="flex-1 flex flex-col items-center justify-center text-center"></div>
+                <div id="exercise-card-container" class="flex-1 flex flex-col items-center justify-center text-center">
+                    </div>
             </div>
 
             <div id="quiz-view" class="hidden w-full flex-1 flex-col justify-between">
                 <div class="flex items-center justify-between pb-3 border-b-2 border-red-100 mb-4">
                     <span class="bg-red-100 text-red-600 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
-                        <i class="fa-solid fa-file-signature mr-1"></i>Thử Thách
+                        <i class="fa-solid fa-file-signature mr-1"></i>Bài Kiểm Tra Cuối Stage
                     </span>
                     <span id="quiz-timer" class="font-fredoka text-amber-600 font-bold text-sm">
                         <i class="fa-solid fa-clock mr-1"></i>Đạt ≥ 80% để mở khóa
                     </span>
                 </div>
-                <div id="quiz-content" class="flex-1 flex flex-col justify-center items-center py-4"></div>
+
+                <div id="quiz-content" class="flex-1 flex flex-col justify-center items-center py-4">
+                    </div>
             </div>
+
         </section>
     </main>
 
     <footer class="bg-white border-t-2 border-amber-200 py-3 text-center text-xs text-slate-400 font-medium">
-        Bé Minh Anh Luyện Nói Tiếng Anh • Tích hợp Google TTS Direct Audio API (vi-VN)
+        Bé Minh Anh Học Tiếng Anh Standard Cambridge • Thiết kế cho GitHub Pages
     </footer>
 
     <div id="audio-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl border-4 border-amber-300 p-6 w-full max-w-md shadow-2xl">
             <div class="flex items-center justify-between mb-5">
-                <h3 class="font-fredoka text-xl font-bold text-amber-700">Cài Đặt Âm Thanh</h3>
+                <h3 class="font-fredoka text-xl font-bold text-amber-700">Cài Đặt Âm Thanh & Giọng Nói</h3>
                 <button onclick="toggleAudioModal()" class="text-slate-400 hover:text-slate-600 text-lg">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
             <div class="space-y-5">
                 <div>
                     <div class="flex justify-between text-sm font-bold text-slate-700 mb-2">
                         <span><i class="fa-solid fa-volume-high text-amber-500 mr-2"></i>Âm Lượng:</span>
                         <span id="vol-value-text" class="text-amber-600">100%</span>
                     </div>
-                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" oninput="updateAudioSettings()" class="w-full h-3 bg-amber-100 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1"
+                        oninput="updateAudioSettings()"
+                        class="w-full h-3 bg-amber-100 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-sm font-bold text-slate-700 mb-2">
+                        <span><i class="fa-solid fa-gauge-high text-blue-500 mr-2"></i>Tốc Độ Nói Cô Giáo:</span>
+                        <span id="rate-value-text" class="text-blue-600">Chậm vừa (0.8x)</span>
+                    </div>
+                    <input type="range" id="rate-slider" min="0.5" max="1.2" step="0.1" value="0.8"
+                        oninput="updateAudioSettings()"
+                        class="w-full h-3 bg-blue-100 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                    <div class="flex justify-between text-[11px] text-slate-400 font-bold mt-1">
+                        <span>Rất Chậm (0.5x)</span>
+                        <span>Chuẩn (1.0x)</span>
+                        <span>Nhanh (1.2x)</span>
+                    </div>
                 </div>
             </div>
-            <button onclick="toggleAudioModal()" class="w-full mt-6 py-3 bg-amber-500 text-white font-bold rounded-2xl shadow-[0_4px_0_#d97706]">Đồng Ý</button>
+
+            <button onclick="toggleAudioModal()" class="w-full mt-6 py-3 bg-amber-500 text-white font-bold rounded-2xl shadow-[0_4px_0_#d97706] hover:bg-amber-400 transition">
+                Đồng Ý
+            </button>
         </div>
     </div>
 
     <script>
+        /* ==========================================================================
+           1. CURRICULUM DATA STRUCTURE (CAMBRIDGE STAGES 1 - 5)
+           ========================================================================== */
         const CURRICULUM_STAGES = [
             {
                 id: 1,
-                name: "Stage 1: Pre-A1 Starters (Hội Thoại Hoạt Hình)",
+                name: "Stage 1: Pre-A1 Starters",
                 ageGroup: "5 - 7 Tuổi",
                 badgeColor: "bg-emerald-500",
-                description: "Hổ con, Sói & Thỏ - Luyện câu ngắn tự nhiên dễ thuộc",
+                description: "Chữ cái, Phát âm Phonics, Màu sắc, Động vật, Gia đình",
                 lessons: [
                     {
                         id: "s1_l1",
-                        title: "Bài 1: Cuộc Gặp Giữa Sói & Hổ Con",
+                        title: "Bài 1: Động Vật Nhỏ (Animals)",
                         items: [
-                            { word: "Tiger, are you sure?", vi: "Hổ ơi, ngươi chắc chưa?", icon: "🐺", speaker: "Wolf (Sói)" },
-                            { word: "Yes, yes, yes!", vi: "Đúng đấy, đúng đấy!", icon: "🐯", speaker: "Tiger (Hổ)" },
-                            { word: "Go away! Go away!", vi: "Biến đi! Biến đi!", icon: "🐯", speaker: "Tiger (Hổ)" },
-                            { word: "Rabbit! Rabbit! I want to eat you!", vi: "Thỏ kìa! Ta muốn ăn thịt ngươi!", icon: "🐺", speaker: "Wolf (Sói)" },
-                            { word: "Help! Help!", vi: "Cứu tôi với! Cứu tôi với!", icon: "🐰", speaker: "Rabbit (Thỏ)" },
-                            { word: "I'm a tiger! Wolf, don't eat the rabbit!", vi: "Ta là hổ đây! Sói, không được ăn thịt thỏ!", icon: "🐯", speaker: "Tiger (Hổ)" },
-                            { word: "Who are you?", vi: "Ngươi là ai?", icon: "🐺", speaker: "Wolf (Sói)" }
+                            { word: "Cat", vi: "Con mèo", icon: "🐱", sample: "It is a cat." },
+                            { word: "Dog", vi: "Con chó", icon: "🐶", sample: "The dog is happy." },
+                            { word: "Apple", vi: "Quả táo", icon: "🍎", sample: "An apple a day." },
+                            { word: "Family", vi: "Gia đình", icon: "👨‍👩‍👧‍👦", sample: "I love my family." }
+                        ]
+                    },
+                    {
+                        id: "s1_l2",
+                        title: "Bài 2: Màu Sắc Rực Rỡ (Colors)",
+                        items: [
+                            { word: "Red", vi: "Màu đỏ", icon: "🔴", sample: "Red apple." },
+                            { word: "Blue", vi: "Màu xanh dương", icon: "🔵", sample: "Blue sky." },
+                            { word: "Yellow", vi: "Màu vàng", icon: "🟡", sample: "Yellow sun." }
                         ]
                     }
                 ],
                 quiz: [
-                    { question: "Khi Tiger muốn đuổi Sói đi, Hổ nói câu gì?", options: ["Help! Help!", "Go away! Go away!", "I want to eat you!"], answer: 1 },
-                    { question: "'Who are you?' trong đoạn hội thoại nghĩa là gì?", options: ["Ngươi là ai?", "Bạn đi đâu đấy?", "Ai cứu tôi với?"], answer: 0 }
+                    { question: "Từ 'Cat' có nghĩa là gì?", options: ["Con chó", "Con mèo", "Quả táo"], answer: 1 },
+                    { question: "Đâu là từ tiếng Anh đại diện cho 'Màu đỏ'?", options: ["Red", "Blue", "Yellow"], answer: 0 },
+                    { question: "'Family' có nghĩa là gì?", options: ["Trường học", "Gia đình", "Bạn bè"], answer: 1 }
                 ]
             },
             {
@@ -276,27 +324,95 @@
                 name: "Stage 2: A1 Movers",
                 ageGroup: "8 - 9 Tuổi",
                 badgeColor: "bg-sky-500",
-                description: "Thói quen hàng ngày, Trường học, Giao tiếp nhí nhảnh",
+                description: "Thói quen hàng ngày, Trường học, Thức ăn, Hội thoại đơn giản",
                 lessons: [
                     {
                         id: "s2_l1",
-                        title: "Bài 1: Ngày Của Bé",
+                        title: "Bài 1: Ngày Của Bé (Daily Routine)",
                         items: [
-                            { word: "Good morning! Time to wake up!", vi: "Chào buổi sáng! Dậy thôi nào!", icon: "⏰", speaker: "Kid" },
-                            { word: "I have a big school bag!", vi: "Tớ có một chiếc cặp sách rất to!", icon: "🎒", speaker: "Kid" }
+                            { word: "School bag", vi: "Cặp sách", icon: "🎒", sample: "I carry my school bag." },
+                            { word: "Breakfast", vi: "Bữa sáng", icon: "🍳", sample: "I eat breakfast." },
+                            { word: "Teacher", vi: "Giáo viên", icon: "👩‍🏫", sample: "She is my teacher." }
                         ]
                     }
                 ],
                 quiz: [
-                    { question: "'Good morning!' có nghĩa là gì?", options: ["Chào buổi tối!", "Chào buổi sáng!", "Tạm biệt!"], answer: 1 }
+                    { question: "'School bag' là cái gì?", options: ["Bàn học", "Cặp sách", "Hộp bút"], answer: 1 },
+                    { question: "'Breakfast' nghĩa là gì?", options: ["Bữa tối", "Bữa trưa", "Bữa sáng"], answer: 2 }
+                ]
+            },
+            {
+                id: 3,
+                name: "Stage 3: A2 Flyers",
+                ageGroup: "10 - 11 Tuổi",
+                badgeColor: "bg-purple-500",
+                description: "Sở thích, Thì Quá khứ / Tương lai, Truyện ngắn",
+                lessons: [
+                    {
+                        id: "s3_l1",
+                        title: "Bài 1: Sở Thích & Hoạt Động (Hobbies)",
+                        items: [
+                            { word: "Football", vi: "Bóng đá", icon: "⚽", sample: "I play football." },
+                            { word: "Swimming", vi: "Bơi lội", icon: "🏊", sample: "Swimming is fun." },
+                            { word: "Library", vi: "Thư viện", icon: "📚", sample: "Reading at the library." }
+                        ]
+                    }
+                ],
+                quiz: [
+                    { question: "'Football' là môn thể thao nào?", options: ["Bóng rổ", "Bóng đá", "Cầu lông"], answer: 1 },
+                    { question: "'Library' nghĩa là gì?", options: ["Thư viện", "Rạp phim", "Công viên"], answer: 0 }
+                ]
+            },
+            {
+                id: 4,
+                name: "Stage 4: A2 Key for Schools (KET)",
+                ageGroup: "12 - 13 Tuổi",
+                badgeColor: "bg-amber-500",
+                description: "Nền tảng Ngữ pháp, Giao tiếp thực tế hàng ngày",
+                lessons: [
+                    {
+                        id: "s4_l1",
+                        title: "Bài 1: Giao Tiếp & Du Lịch",
+                        items: [
+                            { word: "Adventure", vi: "Chuyến phiêu lưu", icon: "🗺️", sample: "We love adventure." },
+                            { word: "Passport", vi: "Hộ chiếu", icon: "📕", sample: "Show your passport." }
+                        ]
+                    }
+                ],
+                quiz: [
+                    { question: "'Passport' có nghĩa là gì?", options: ["Vé xe", "Hộ chiếu", "Bản đồ"], answer: 1 }
+                ]
+            },
+            {
+                id: 5,
+                name: "Stage 5: B1 Preliminary for Schools (PET)",
+                ageGroup: "14 - 15 Tuổi",
+                badgeColor: "bg-rose-500",
+                description: "Tiếng Anh Học thuật, Biểu đạt ý kiến, Đọc & Nghe chuyên sâu",
+                lessons: [
+                    {
+                        id: "s5_l1",
+                        title: "Bài 1: Tư Duy & Quan Điểm (Opinions)",
+                        items: [
+                            { word: "Environment", vi: "Môi trường", icon: "🌱", sample: "Protect the environment." },
+                            { word: "Technology", vi: "Công nghệ", icon: "💻", sample: "Modern technology." }
+                        ]
+                    }
+                ],
+                quiz: [
+                    { question: "'Environment' có nghĩa là gì?", options: ["Công nghệ", "Môi trường", "Giáo dục"], answer: 1 }
                 ]
             }
         ];
 
+        /* ==========================================================================
+           2. STATE MANAGEMENT & STORAGE
+           ========================================================================== */
         let state = {
             stars: parseInt(localStorage.getItem('gemini_stars') || '0'),
             unlockedStages: JSON.parse(localStorage.getItem('gemini_unlocked') || '[1]'),
             stageScores: JSON.parse(localStorage.getItem('gemini_scores') || '{}'),
+            speechRate: parseFloat(localStorage.getItem('gemini_rate') || '0.8'),
             speechVolume: parseFloat(localStorage.getItem('gemini_vol') || '1.0'),
             currentStage: null,
             currentLesson: null,
@@ -306,71 +422,91 @@
             isListening: false
         };
 
+        // Danh sách giọng đọc có sẵn trên hệ thống
+        let availableVoices = [];
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                availableVoices = window.speechSynthesis.getVoices();
+            };
+        }
+
+        // Web Speech Recognition Initialization
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = SpeechRecognition ? new SpeechRecognition() : null;
-        if (recognition) {
+        let recognition = null;
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.lang = 'en-US';
             recognition.interimResults = false;
         }
 
         /* ==========================================================================
-           GOOGLE TTS AUDIO DIRECT PLAYER (PHÁT ÂM TIẾNG VIỆT CHUẨN vi-VN TRỰC TUYẾN)
+           3. AUDIO & SPEECH SYNTHESIS ENGINE (XỬ LÝ DỨT ĐIỂM GIỌNG ĐỌC)
            ========================================================================== */
-        let activeAudio = null;
-
         function speak(text, lang = 'vi-VN', onEndCallback = null) {
-            // Ngừng âm thanh cũ nếu đang phát
-            if (activeAudio) {
-                activeAudio.pause();
-                activeAudio = null;
-            }
-
-            // Mã hóa đường truyền phát âm trực tiếp từ Google TTS Direct Audio
-            const encodedText = encodeURIComponent(text);
-            const ttsLang = lang.startsWith('en') ? 'en' : 'vi';
-            const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${ttsLang}&client=tw-ob`;
-
-            const audio = new Audio(audioUrl);
-            audio.volume = state.speechVolume;
-            activeAudio = audio;
-
-            setTeacherState('talking');
-
-            audio.play().then(() => {
-                audio.onended = () => {
-                    setTeacherState('idle');
-                    activeAudio = null;
-                    if (onEndCallback) onEndCallback();
-                };
-            }).catch(() => {
-                // Tự động chuyển về Web Speech API phòng trường hợp offline
-                fallbackSpeechSynthesis(text, lang, onEndCallback);
-            });
-        }
-
-        function fallbackSpeechSynthesis(text, lang, onEndCallback) {
             if (!('speechSynthesis' in window)) {
                 if (onEndCallback) onEndCallback();
                 return;
             }
-            window.speechSynthesis.cancel();
+
+            window.speechSynthesis.cancel(); // Dừng câu đang phát trước đó
             const utter = new SpeechSynthesisUtterance(text);
             utter.lang = lang;
+            utter.rate = state.speechRate;
             utter.volume = state.speechVolume;
-            utter.rate = 0.95;
-            utter.pitch = 1.3;
+
+            // Đảm bảo lấy danh sách giọng đọc mới nhất
+            if (availableVoices.length === 0) {
+                availableVoices = window.speechSynthesis.getVoices();
+            }
+
+            // Ép buộc lọc đúng giọng chuẩn theo ngôn ngữ (Đặc trị lỗi máy Samsung/Android)
+            if (lang.startsWith('vi')) {
+                const viVoice = availableVoices.find(v => v.lang.includes('vi') || v.lang.includes('VI'));
+                if (viVoice) utter.voice = viVoice;
+            } else if (lang.startsWith('en')) {
+                const enVoice = availableVoices.find(v => v.lang.includes('en-US') || v.lang.includes('en_US') || v.lang.includes('en'));
+                if (enVoice) utter.voice = enVoice;
+            }
+
+            setTeacherState('talking');
 
             utter.onend = () => {
                 setTeacherState('idle');
                 if (onEndCallback) onEndCallback();
             };
+
+            utter.onerror = () => {
+                setTeacherState('idle');
+                // Nếu Web Speech API bị từ chối phát âm trên Android, chuyển sang gọi Audio CDN dự phòng
+                speakFallbackCDN(text, lang, onEndCallback);
+            };
+
             window.speechSynthesis.speak(utter);
+        }
+
+        // Phương thức dự phòng tiếng Việt/tiếng Anh chuẩn trực tuyến khi bị lỗi trình duyệt
+        function speakFallbackCDN(text, lang, onEndCallback) {
+            const cleanLang = lang.startsWith('vi') ? 'vi' : 'en';
+            const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${cleanLang}&client=tw-ob`;
+            const audio = new Audio(audioUrl);
+            audio.volume = state.speechVolume;
+
+            setTeacherState('talking');
+            audio.play().then(() => {
+                audio.onended = () => {
+                    setTeacherState('idle');
+                    if (onEndCallback) onEndCallback();
+                };
+            }).catch(() => {
+                setTeacherState('idle');
+                if (onEndCallback) onEndCallback();
+            });
         }
 
         function speakProfileName() {
             speak("Bé Minh Anh", "vi-VN", () => {
-                setTeacherSpeech("Bé Minh Anh ơi! Cùng tập nói tiếng Anh với cô giáo nhé!");
+                setTeacherSpeech("Bé Minh Anh cố lên nhé! Hôm nay chúng ta cùng giành thật nhiều sao!");
             });
         }
 
@@ -394,9 +530,14 @@
 
         function setTeacherSpeech(text) {
             const speechText = document.getElementById('teacher-speech-text');
-            if (speechText) speechText.innerText = text;
+            if (speechText) {
+                speechText.innerText = text;
+            }
         }
 
+        /* ==========================================================================
+           4. ROADMAP RENDERER & PROGRESS PERSISTENCE
+           ========================================================================== */
         function updateStarDisplay() {
             document.getElementById('star-count').innerText = state.stars;
             localStorage.setItem('gemini_stars', state.stars.toString());
@@ -414,7 +555,9 @@
 
                 const card = document.createElement('div');
                 card.className = `p-5 rounded-3xl border-4 transition-all ${
-                    isUnlocked ? 'bg-white border-amber-300 shadow-md hover:shadow-lg' : 'bg-slate-50 border-slate-200 opacity-75'
+                    isUnlocked
+                        ? 'bg-white border-amber-300 shadow-md hover:shadow-lg'
+                        : 'bg-slate-50 border-slate-200 opacity-75'
                 }`;
 
                 card.innerHTML = `
@@ -431,7 +574,7 @@
                                 <p class="text-xs sm:text-sm text-slate-500 font-semibold mt-1">${stage.description}</p>
                                 ${lastScore !== null ? `
                                     <div class="mt-2 text-xs font-bold ${lastScore >= 80 ? 'text-green-600' : 'text-amber-600'}">
-                                        <i class="fa-solid fa-trophy mr-1"></i>Điểm kiểm tra: ${lastScore}%
+                                        <i class="fa-solid fa-trophy mr-1"></i>Điểm bài test gần nhất: ${lastScore}%
                                     </div>
                                 ` : ''}
                             </div>
@@ -440,10 +583,10 @@
                         <div class="flex items-center space-x-2 sm:self-center">
                             ${isUnlocked ? `
                                 <button onclick="startStageLesson(${stage.id})" class="btn-3d-green text-white font-bold px-5 py-2.5 rounded-2xl text-sm flex-1 sm:flex-none">
-                                    <i class="fa-solid fa-play mr-2"></i>Luyện Nói
+                                    <i class="fa-solid fa-book-open mr-2"></i>Vào Học
                                 </button>
                                 <button onclick="startStageQuiz(${stage.id})" class="btn-3d-yellow text-slate-800 font-bold px-4 py-2.5 rounded-2xl text-sm flex-1 sm:flex-none">
-                                    <i class="fa-solid fa-file-check mr-1.5"></i>Thử Thách
+                                    <i class="fa-solid fa-file-check mr-1.5"></i>Kiểm Tra
                                 </button>
                             ` : `
                                 <button disabled class="bg-slate-200 text-slate-400 font-bold px-5 py-2.5 rounded-2xl text-sm cursor-not-allowed w-full">
@@ -461,10 +604,13 @@
             document.getElementById('roadmap-view').classList.remove('hidden');
             document.getElementById('lesson-view').classList.add('hidden');
             document.getElementById('quiz-view').classList.add('hidden');
-            setTeacherSpeech("Bé chọn bài học để luyện giọng cùng cô nhé!");
+            setTeacherSpeech("Chọn một chặng để cùng học với Cô Mèo nhé bé Minh Anh!");
             renderRoadmap();
         }
 
+        /* ==========================================================================
+           5. LESSON PRACTICE INTERACTIVE FLOW
+           ========================================================================== */
         function startStageLesson(stageId) {
             const stage = CURRICULUM_STAGES.find(s => s.id === stageId);
             if (!stage || !stage.lessons.length) return;
@@ -474,140 +620,129 @@
             state.exerciseIndex = 0;
 
             document.getElementById('roadmap-view').classList.add('hidden');
-            document.getElementById('quiz-view').classList.add('hidden');
             document.getElementById('lesson-view').classList.remove('hidden');
-            document.getElementById('lesson-stage-title').innerText = stage.name;
+            document.getElementById('quiz-view').classList.add('hidden');
 
-            renderExercise();
+            document.getElementById('lesson-stage-title').innerText = stage.name;
+            renderExerciseCard();
         }
 
-        function renderExercise() {
+        function renderExerciseCard() {
             const items = state.currentLesson.items;
             const item = items[state.exerciseIndex];
-            const progressPct = ((state.exerciseIndex + 1) / items.length) * 100;
-
-            document.getElementById('exercise-progress').style.width = `${progressPct}%`;
+            const progressPercent = ((state.exerciseIndex + 1) / items.length) * 100;
+            document.getElementById('exercise-progress').style.width = `${progressPercent}%`;
 
             const container = document.getElementById('exercise-card-container');
             container.innerHTML = `
-                <div class="max-w-md w-full bg-amber-50/60 border-2 border-amber-200 rounded-3xl p-6 shadow-sm">
-                    <div class="text-6xl mb-2 animate-bounce">${item.icon}</div>
-                    <span class="bg-amber-200 text-amber-900 font-bold text-xs px-3 py-1 rounded-full">${item.speaker || 'Nhân vật'}</span>
-                    <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-slate-800 tracking-wide mt-3">"${item.word}"</h2>
-                    <p class="text-base text-amber-700 font-bold mt-1">Dịch: "${item.vi}"</p>
-
-                    <div class="mt-6 flex flex-col gap-3">
-                        <button onclick="playTargetWord('${item.word.replace(/'/g, "\\'")}', '${item.vi.replace(/'/g, "\\'")}')" class="btn-3d-blue text-white font-bold py-3 px-6 rounded-2xl flex items-center justify-center space-x-2 text-base">
-                            <i class="fa-solid fa-volume-high text-lg"></i>
-                            <span>Nghe Giọng Đọc Google</span>
-                        </button>
-
-                        <button id="mic-btn" onclick="startVoiceRecognition('${item.word.replace(/'/g, "\\'")}')" class="btn-3d-yellow text-slate-800 font-bold py-3 px-6 rounded-2xl flex items-center justify-center space-x-2 text-base">
-                            <i id="mic-icon" class="fa-solid fa-microphone text-lg text-rose-600"></i>
-                            <span id="mic-btn-text">Bé Nhại Theo (Bấm Mic)</span>
-                        </button>
-                    </div>
+                <div class="text-6xl sm:text-8xl my-3 animate-bounce">${item.icon}</div>
+                <h3 class="font-fredoka text-3xl sm:text-5xl font-bold text-slate-800 tracking-wide mb-1">${item.word}</h3>
+                <p class="text-lg font-bold text-amber-600 mb-4">${item.vi}</p>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2 mb-6 text-sm sm:text-base font-semibold text-slate-600">
+                    "<span class="text-amber-800">${item.sample}</span>"
                 </div>
 
-                <div class="mt-6 w-full max-w-md flex justify-between items-center">
-                    <button onclick="prevExercise()" ${state.exerciseIndex === 0 ? 'disabled class="opacity-40 cursor-not-allowed text-slate-400 font-bold"' : 'class="text-slate-600 hover:text-amber-600 font-bold text-sm"'}>
-                        <i class="fa-solid fa-chevron-left mr-1"></i>Câu Trước
+                <div class="flex flex-wrap items-center justify-center gap-3 w-full max-w-md">
+                    <button onclick="speakCurrentWord()" class="btn-3d-blue text-white font-bold px-5 py-3 rounded-2xl text-base flex-1 flex items-center justify-center">
+                        <i class="fa-solid fa-volume-high mr-2 text-lg"></i>Nghe Phát Âm
                     </button>
-                    <span class="text-xs font-bold text-slate-400">${state.exerciseIndex + 1} / ${items.length}</span>
-                    <button onclick="nextExercise()" class="btn-3d-green text-white font-bold px-6 py-2.5 rounded-2xl text-sm">
-                        ${state.exerciseIndex === items.length - 1 ? 'Hoàn Thành <i class="fa-solid fa-check ml-1"></i>' : 'Câu Tiếp <i class="fa-solid fa-chevron-right ml-1"></i>'}
+                    <button id="mic-btn" onclick="toggleSpeechRecognition()" class="btn-3d-yellow text-slate-800 font-bold px-5 py-3 rounded-2xl text-base flex-1 flex items-center justify-center">
+                        <i class="fa-solid fa-microphone mr-2 text-lg"></i>Nói Cùng Bé
                     </button>
                 </div>
+
+                <button onclick="nextExerciseItem()" class="mt-8 btn-3d-green text-white font-bold px-8 py-3.5 rounded-2xl text-lg w-full max-w-xs shadow-md">
+                    ${state.exerciseIndex < items.length - 1 ? 'Từ Tiếp Theo <i class="fa-solid fa-arrow-right ml-2"></i>' : 'Hoàn Thành Bài Học 🎉'}
+                </button>
             `;
 
-            const guideText = `${item.speaker || 'Nhân vật'} nói: "${item.vi}". Bé nghe và nhại lại nhé!`;
-            setTeacherSpeech(guideText);
-            speak(guideText, "vi-VN", () => {
-                speak(item.word, "en-US");
-            });
+            setTeacherSpeech(`Hãy đọc từ "${item.word}" nghĩa là "${item.vi}" nhé!`);
+            speak(item.word, 'en-US');
         }
 
-        function playTargetWord(word, vi) {
-            setTeacherSpeech(`Phát âm tiếng Anh: "${word}"`);
-            speak(word, "en-US");
+        function speakCurrentWord() {
+            const item = state.currentLesson.items[state.exerciseIndex];
+            if (item) speak(item.word, 'en-US');
         }
 
-        function nextExercise() {
-            const items = state.currentLesson.items;
-            if (state.exerciseIndex < items.length - 1) {
-                state.exerciseIndex++;
-                renderExercise();
-            } else {
-                state.stars += 5;
-                updateStarDisplay();
-                setTeacherState('dance');
-                speak("Giỏi lắm bé Minh Anh! Bé đã hoàn thành bài tập rồi! Thưởng 5 sao nè!", "vi-VN", () => {
-                    setTimeout(() => {
-                        setTeacherState('idle');
-                        showRoadmap();
-                    }, 1500);
-                });
-            }
-        }
-
-        function prevExercise() {
-            if (state.exerciseIndex > 0) {
-                state.exerciseIndex--;
-                renderExercise();
-            }
-        }
-
-        function startVoiceRecognition(targetWord) {
+        function toggleSpeechRecognition() {
             if (!recognition) {
-                alert("Trình duyệt chưa hỗ trợ ghi âm. Bé hãy mở trên Chrome nhé!");
+                alert("Trình duyệt không hỗ trợ nhận diện giọng nói.");
                 return;
             }
-            if (state.isListening) return;
 
-            state.isListening = true;
-            const micBtnText = document.getElementById('mic-btn-text');
-            const micIcon = document.getElementById('mic-icon');
-
-            if (micBtnText) micBtnText.innerText = "Đang lắng nghe bé nói...";
-            if (micIcon) micIcon.className = "fa-solid fa-spinner fa-spin text-lg text-rose-600";
-
-            setTeacherSpeech("Cô đang lắng nghe đây, bé đọc to rõ lên nhé! 🎤");
-
-            try { recognition.start(); } catch (e) {}
-
-            recognition.onresult = (event) => {
+            const micBtn = document.getElementById('mic-btn');
+            if (state.isListening) {
+                recognition.stop();
                 state.isListening = false;
-                if (micBtnText) micBtnText.innerText = "Bé Nhại Theo (Bấm Mic)";
-                if (micIcon) micIcon.className = "fa-solid fa-microphone text-lg text-rose-600";
+                if (micBtn) micBtn.classList.remove('animate-pulse', 'bg-red-500', 'text-white');
+            } else {
+                try {
+                    recognition.start();
+                    state.isListening = true;
+                    if (micBtn) {
+                        micBtn.classList.add('animate-pulse', 'bg-red-500', 'text-white');
+                        micBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang Nghe...`;
+                    }
+                    setTeacherSpeech("Cô Mèo đang lắng nghe bé nói đây...");
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
 
-                const transcript = event.results[0][0].transcript.toLowerCase().trim();
-                const target = targetWord.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, "").trim();
-                const spoken = transcript.replace(/[^a-zA-Z0-9 ]/g, "").trim();
+        if (recognition) {
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript.toLowerCase().trim();
+                const currentWord = state.currentLesson.items[state.exerciseIndex].word.toLowerCase().trim();
 
-                if (spoken.includes(target) || target.includes(spoken)) {
+                state.isListening = false;
+                const micBtn = document.getElementById('mic-btn');
+                if (micBtn) {
+                    micBtn.classList.remove('animate-pulse', 'bg-red-500', 'text-white');
+                    micBtn.innerHTML = `<i class="fa-solid fa-microphone mr-2 text-lg"></i>Nói Cùng Bé`;
+                }
+
+                if (speechResult.includes(currentWord)) {
                     state.stars += 2;
                     updateStarDisplay();
                     setTeacherState('dance');
-                    setTeacherSpeech(`Đúng rồi! Bé phát âm rất chuẩn! Thưởng bé 2 sao ⭐`);
-                    speak("Giỏi quá! Bé phát âm rất chuẩn!", "vi-VN", () => {
-                        setTimeout(() => setTeacherState('idle'), 1200);
-                    });
+                    setTeacherSpeech(`Giỏi lắm Minh Anh! Bé nói rất chuẩn từ "${currentWord}" (+2 ⭐)`);
+                    speak("Tuyệt vời! Bé nói đúng rồi!", "vi-VN");
                 } else {
-                    setTeacherSpeech(`Bé nói là "${transcript}". Thử lại lần nữa nhé!`);
-                    speak(`Bé nghe và đọc lại nhé`, "vi-VN", () => {
-                        speak(targetWord, "en-US");
-                    });
+                    setTeacherSpeech(`Bé nói là "${speechResult}". Thử lại nhé, đọc chuẩn là "${currentWord}".`);
+                    speak("Bé thử lại nhé!", "vi-VN");
                 }
             };
 
             recognition.onerror = () => {
                 state.isListening = false;
-                if (micBtnText) micBtnText.innerText = "Bé Nhại Theo (Bấm Mic)";
-                if (micIcon) micIcon.className = "fa-solid fa-microphone text-lg text-rose-600";
-                setTeacherSpeech("Cô chưa nghe rõ, bé bấm mic rồi đọc lại nha!");
+                const micBtn = document.getElementById('mic-btn');
+                if (micBtn) {
+                    micBtn.classList.remove('animate-pulse', 'bg-red-500', 'text-white');
+                    micBtn.innerHTML = `<i class="fa-solid fa-microphone mr-2 text-lg"></i>Nói Cùng Bé`;
+                }
             };
         }
 
+        function nextExerciseItem() {
+            const items = state.currentLesson.items;
+            if (state.exerciseIndex < items.length - 1) {
+                state.exerciseIndex++;
+                renderExerciseCard();
+            } else {
+                state.stars += 5;
+                updateStarDisplay();
+                setTeacherSpeech("Xuất sắc! Bé đã hoàn thành bài học và nhận 5 Sao! 🌟");
+                speak("Chúc mừng bé Minh Anh đã hoàn thành bài học!", "vi-VN", () => {
+                    showRoadmap();
+                });
+            }
+        }
+
+        /* ==========================================================================
+           6. QUIZ / EXAMINATION SYSTEM
+           ========================================================================== */
         function startStageQuiz(stageId) {
             const stage = CURRICULUM_STAGES.find(s => s.id === stageId);
             if (!stage || !stage.quiz.length) return;
@@ -619,139 +754,151 @@
             document.getElementById('roadmap-view').classList.add('hidden');
             document.getElementById('lesson-view').classList.add('hidden');
             document.getElementById('quiz-view').classList.remove('hidden');
+            document.getElementById('quiz-view').classList.add('flex');
 
             renderQuizQuestion();
         }
 
         function renderQuizQuestion() {
             const quizList = state.currentStage.quiz;
+            if (state.quizIndex >= quizList.length) {
+                finishQuiz();
+                return;
+            }
+
             const q = quizList[state.quizIndex];
+            const content = document.getElementById('quiz-content');
 
-            const container = document.getElementById('quiz-content');
-            container.innerHTML = `
-                <div class="w-full max-w-lg bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-sm">
-                    <span class="text-xs font-bold text-slate-400">Câu hỏi ${state.quizIndex + 1} / ${quizList.length}</span>
-                    <h3 class="font-fredoka text-xl font-bold text-slate-800 mt-2 mb-6">${q.question}</h3>
+            let optionsHTML = '';
+            q.options.forEach((opt, idx) => {
+                optionsHTML += `
+                    <button onclick="submitAnswer(${idx})" class="w-full bg-slate-50 hover:bg-amber-100 border-2 border-slate-200 hover:border-amber-400 text-slate-800 font-bold py-3.5 px-4 rounded-2xl text-base transition shadow-sm flex items-center justify-between">
+                        <span>${opt}</span>
+                        <i class="fa-regular fa-circle-check text-slate-300"></i>
+                    </button>
+                `;
+            });
 
-                    <div class="space-y-3 w-full">
-                        ${q.options.map((opt, idx) => `
-                            <button onclick="handleQuizAnswer(${idx})" class="w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50 font-bold text-slate-700 transition flex items-center justify-between">
-                                <span>${opt}</span>
-                                <i class="fa-regular fa-circle text-slate-300"></i>
-                            </button>
-                        `).join('')}
-                    </div>
+            content.innerHTML = `
+                <div class="w-full max-w-lg bg-white rounded-3xl p-6 border-2 border-amber-200 shadow-md">
+                    <span class="text-xs font-bold text-amber-600 bg-amber-100 px-3 py-1 rounded-full">Câu ${state.quizIndex + 1} / ${quizList.length}</span>
+                    <h3 class="font-fredoka text-xl sm:text-2xl font-bold text-slate-800 mt-3 mb-6">${q.question}</h3>
+                    <div class="space-y-3">${optionsHTML}</div>
                 </div>
             `;
 
-            setTeacherSpeech(`Câu ${state.quizIndex + 1}: ${q.question}`);
+            setTeacherSpeech(`Câu hỏi số ${state.quizIndex + 1}: ${q.question}`);
             speak(q.question, "vi-VN");
         }
 
-        function handleQuizAnswer(selectedIndex) {
-            const quizList = state.currentStage.quiz;
-            const q = quizList[state.quizIndex];
-
-            if (selectedIndex === q.answer) state.quizScore++;
-
-            if (state.quizIndex < quizList.length - 1) {
-                state.quizIndex++;
-                renderQuizQuestion();
-            } else {
-                finishQuiz();
+        function submitAnswer(selectedIndex) {
+            const q = state.currentStage.quiz[state.quizIndex];
+            if (selectedIndex === q.answer) {
+                state.quizScore++;
             }
+            state.quizIndex++;
+            renderQuizQuestion();
         }
 
         function finishQuiz() {
             const quizList = state.currentStage.quiz;
-            const pct = Math.round((state.quizScore / quizList.length) * 100);
-            state.stageScores[state.currentStage.id] = pct;
+            const percentage = Math.round((state.quizScore / quizList.length) * 100);
+            state.stageScores[state.currentStage.id] = percentage;
 
-            const passed = pct >= 80;
+            const passed = percentage >= 80;
             if (passed) {
                 const nextStageId = state.currentStage.id + 1;
-                if (nextStageId <= CURRICULUM_STAGES.length && !state.unlockedStages.includes(nextStageId)) {
+                if (!state.unlockedStages.includes(nextStageId) && nextStageId <= CURRICULUM_STAGES.length) {
                     state.unlockedStages.push(nextStageId);
                 }
                 state.stars += 10;
-                updateStarDisplay();
-                setTeacherState('dance');
             }
 
-            const container = document.getElementById('quiz-content');
-            container.innerHTML = `
-                <div class="text-center p-6 max-w-md">
-                    <div class="text-6xl mb-4">${passed ? '🎉' : '💪'}</div>
-                    <h3 class="font-fredoka text-2xl font-bold text-slate-800">
-                        ${passed ? 'Chúc Mừng Bé Minh Anh!' : 'Cố Gắng Lần Sau Nhé!'}
-                    </h3>
-                    <p class="text-base font-bold mt-2 ${passed ? 'text-green-600' : 'text-amber-600'}">
-                        Kết quả: ${pct}% (${state.quizScore}/${quizList.length} câu đúng)
+            updateStarDisplay();
+
+            const content = document.getElementById('quiz-content');
+            content.innerHTML = `
+                <div class="text-center p-6 max-w-md w-full bg-white rounded-3xl border-4 ${passed ? 'border-green-300' : 'border-amber-300'} shadow-xl">
+                    <div class="text-6xl mb-3">${passed ? '🏆' : '💪'}</div>
+                    <h3 class="font-fredoka text-2xl font-bold text-slate-800 mb-2">${passed ? 'Chúc Mừng Bé Minh Anh!' : 'Cố Lên Bé Nhé!'}</h3>
+                    <p class="text-lg font-bold ${passed ? 'text-green-600' : 'text-amber-600'} mb-4">Kết quả: ${percentage}% (${state.quizScore}/${quizList.length} câu)</p>
+                    <p class="text-sm font-semibold text-slate-500 mb-6">
+                        ${passed ? 'Bé đã hoàn thành xuất sắc và mở khóa chặng tiếp theo! (+10 ⭐)' : 'Bé cần đạt tối thiểu 80% để mở khóa chặng tiếp theo.'}
                     </p>
-                    <button onclick="showRoadmap()" class="btn-3d-green text-white font-bold px-8 py-3 rounded-2xl text-base mt-6">
+                    <button onclick="showRoadmap()" class="btn-3d-green text-white font-bold px-8 py-3.5 rounded-2xl text-base w-full">
                         Quay Về Lộ Trình
                     </button>
                 </div>
             `;
 
-            const endSpeech = passed
-                ? `Tuyệt vời quá bé Minh Anh ơi! Bé đạt ${pct} phần trăm và đã mở khóa bài học mới!`
-                : `Bé đạt ${pct} phần trăm. Cùng ôn lại rồi thử lại nhé!`;
-
-            setTeacherSpeech(endSpeech);
-            speak(endSpeech, "vi-VN", () => {
-                setTimeout(() => setTeacherState('idle'), 1500);
-            });
-        }
-
-        let mediaStream = null;
-        async function toggleCamera() {
-            const camCard = document.getElementById('camera-card');
-            const videoEl = document.getElementById('webcam-video');
-            const placeholder = document.getElementById('cam-placeholder');
-            const btn = document.getElementById('cam-toggle-btn');
-
-            if (camCard.classList.contains('hidden')) {
-                camCard.classList.remove('hidden');
-                camCard.classList.add('flex');
-                try {
-                    mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                    videoEl.srcObject = mediaStream;
-                    placeholder.classList.add('hidden');
-                    btn.className = "w-10 h-10 bg-red-100 hover:bg-red-200 text-red-600 border-2 border-red-300 rounded-2xl flex items-center justify-center transition";
-                } catch (err) {
-                    alert("Không thể mở camera.");
-                    camCard.classList.add('hidden');
-                }
+            if (passed) {
+                setTeacherState('dance');
+                setTeacherSpeech(`Tuyệt vời! Bé Minh Anh đạt ${percentage}% điểm và mở khóa bài mới! 🎉`);
+                speak(`Chúc mừng bé Minh Anh đã vượt qua bài kiểm tra với ${percentage} phần trăm điểm!`, "vi-VN");
             } else {
-                if (mediaStream) {
-                    mediaStream.getTracks().forEach(track => track.stop());
-                    mediaStream = null;
-                }
-                camCard.classList.add('hidden');
-                camCard.classList.remove('flex');
-                btn.className = "w-10 h-10 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 border-2 border-indigo-300 rounded-2xl flex items-center justify-center transition";
+                setTeacherSpeech(`Bé đạt ${percentage}%. Hãy ôn lại bài học và kiểm tra lại nhé!`);
+                speak("Bé hãy ôn lại bài học và thử lại nhé!", "vi-VN");
             }
         }
 
+        /* ==========================================================================
+           7. MODAL & CAMERA CONTROLS
+           ========================================================================== */
         function toggleAudioModal() {
-            document.getElementById('audio-modal').classList.toggle('hidden');
+            const modal = document.getElementById('audio-modal');
+            modal.classList.toggle('hidden');
         }
 
         function updateAudioSettings() {
             const vol = parseFloat(document.getElementById('volume-slider').value);
+            const rate = parseFloat(document.getElementById('rate-slider').value);
+
             state.speechVolume = vol;
-            localStorage.setItem('gemini_vol', vol.toString());
+            state.speechRate = rate;
+
             document.getElementById('vol-value-text').innerText = `${Math.round(vol * 100)}%`;
+            document.getElementById('rate-value-text').innerText = `${rate}x`;
+
+            localStorage.setItem('gemini_vol', vol.toString());
+            localStorage.setItem('gemini_rate', rate.toString());
         }
 
+        let webcamStream = null;
+        async function toggleCamera() {
+            const card = document.getElementById('camera-card');
+            const video = document.getElementById('webcam-video');
+            const placeholder = document.getElementById('cam-placeholder');
+
+            if (card.classList.contains('hidden')) {
+                card.classList.remove('hidden');
+                card.classList.add('flex');
+                try {
+                    webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = webcamStream;
+                    placeholder.classList.add('hidden');
+                } catch (err) {
+                    console.error("Camera access error:", err);
+                    placeholder.innerHTML = `<span class="text-xs text-red-400">Không thể mở camera</span>`;
+                }
+            } else {
+                if (webcamStream) {
+                    webcamStream.getTracks().forEach(track => track.stop());
+                    webcamStream = null;
+                }
+                card.classList.add('hidden');
+                card.classList.remove('flex');
+            }
+        }
+
+        /* ==========================================================================
+           8. INITIALIZATION ON LOAD
+           ========================================================================== */
         window.addEventListener('DOMContentLoaded', () => {
             updateStarDisplay();
             renderRoadmap();
-
-            setTimeout(() => {
-                speak("Chào bé Minh Anh! Cô Mèo Gemini đã sẵn sàng cùng bé tập nói tiếng Anh rồi!", "vi-VN");
-            }, 600);
+            document.getElementById('volume-slider').value = state.speechVolume;
+            document.getElementById('rate-slider').value = state.speechRate;
+            updateAudioSettings();
         });
     </script>
 </body>
